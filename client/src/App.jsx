@@ -1,36 +1,37 @@
-import { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 
-function App() {
-    const [data, setData] = useState(null);
+const App = () => {
+  const [healthStatus, setHealthStatus] = useState('checking...');
 
-    useEffect(() => {
-        const apiUrl = import.meta.env.VITE_API_URL || '';
-        fetch(`${apiUrl}/api/health`)
-            .then(res => res.json())
-            .then(data => setData(data))
-            .catch(err => console.error('Error fetching health check:', err));
-    }, []);
+  useEffect(() => {
+    const checkHealth = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/health');
+        if (response.ok) {
+          const data = await response.json();
+          setHealthStatus(data.status);
+        } else {
+          setHealthStatus('error');
+        }
+      } catch (error) {
+        setHealthStatus('offline');
+      }
+    };
 
-    return (
-        <div className="container">
-            <h1>ShopSmart</h1>
-            <div className="card">
-                <h2>Backend Status</h2>
-                {data ? (
-                    <div>
-                        <p>Status: <span className="status-ok">{data.status}</span></p>
-                        <p>Message: {data.message}</p>
-                        <p>Timestamp: {data.timestamp}</p>
-                    </div>
-                ) : (
-                    <p>Loading backend status...</p>
-                )}
-            </div>
-            <p className="hint">
-                Edit <code>src/App.jsx</code> and save to test HMR
-            </p>
+    checkHealth();
+  }, []);
+
+  return (
+    <div className="container">
+      <header className="hero">
+        <h1>ShopSmart</h1>
+        <p>Your minimalist shopping experience.</p>
+        <div className="status-badge">
+          System Status: <span className={`status ${healthStatus}`}>{healthStatus}</span>
         </div>
-    )
-}
+      </header>
+    </div>
+  );
+};
 
-export default App
+export default App;
