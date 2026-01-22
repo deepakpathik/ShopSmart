@@ -67,6 +67,6 @@ body {
   color: var(--error-color);
 }
 
-.status.checking... {
+.status.checking {
   color: var(--secondary-color);
 }

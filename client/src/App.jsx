@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 const App = () => {
-  const [healthStatus, setHealthStatus] = useState('checking...');
+  const [healthStatus, setHealthStatus] = useState('checking');
 
   useEffect(() => {
     const checkHealth = async () => {
