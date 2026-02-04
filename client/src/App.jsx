@@ -4,6 +4,7 @@ import './index.css';
 const App = () => {
   const [healthStatus, setHealthStatus] = useState('checking');
   const [email, setEmail] = useState('');
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     const checkHealth = async () => {
@@ -24,17 +25,25 @@ const App = () => {
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
+    setMessage({ type: 'checking', text: 'Subscribing...' });
     try {
-      await fetch('http://localhost:5005/api/users', {
+      const res = await fetch('http://localhost:5005/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
       });
+      
+      if (!res.ok) {
+        throw new Error('Failed to subscribe');
+      }
+      
       setEmail('');
-      alert('Subscribed successfully!');
+      setMessage({ type: 'ok', text: 'Subscribed successfully!' });
     } catch(err) {
-      alert('Failed to process your subscription.');
+      setMessage({ type: 'error', text: 'Failed to process your subscription.' });
     }
+    
+    setTimeout(() => setMessage(null), 3000);
   };
 
   return (
@@ -57,6 +66,11 @@ const App = () => {
           />
           <button type="submit" className="shadcn-button">Subscribe</button>
         </form>
+        {message && (
+          <div style={{ marginTop: '1rem', fontSize: '0.875rem' }} className={`status ${message.type}`}>
+            {message.text}
+          </div>
+        )}
       </header>
     </div>
   );
