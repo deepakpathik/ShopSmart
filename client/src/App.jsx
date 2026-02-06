@@ -5,13 +5,14 @@ const App = () => {
   const [healthStatus, setHealthStatus] = useState('checking');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState(null);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const checkHealth = async () => {
+    const fetchHealthAndUsers = async () => {
       try {
-        const response = await fetch('http://localhost:5005/api/health');
-        if (response.ok) {
-          const data = await response.json();
+        const healthRes = await fetch('http://localhost:5005/api/health');
+        if (healthRes.ok) {
+          const data = await healthRes.json();
           setHealthStatus(data.status);
         } else {
           setHealthStatus('error');
@@ -19,8 +20,17 @@ const App = () => {
       } catch (error) {
         setHealthStatus('offline');
       }
+
+      try {
+        const usersRes = await fetch('http://localhost:5005/api/users');
+        if (usersRes.ok) {
+          const usersData = await usersRes.json();
+          setUsers(usersData);
+        }
+      } catch (error) {
+      }
     };
-    checkHealth();
+    fetchHealthAndUsers();
   }, []);
 
   const handleSubscribe = async (e) => {
@@ -39,6 +49,12 @@ const App = () => {
       
       setEmail('');
       setMessage({ type: 'ok', text: 'Subscribed successfully!' });
+      
+      const updatedUsersRes = await fetch('http://localhost:5005/api/users');
+      if (updatedUsersRes.ok) {
+        const updatedUsers = await updatedUsersRes.json();
+        setUsers(updatedUsers);
+      }
     } catch(err) {
       setMessage({ type: 'error', text: 'Failed to process your subscription.' });
     }
@@ -72,6 +88,26 @@ const App = () => {
           </div>
         )}
       </header>
+
+      {users.length > 0 && (
+        <div className="users-container">
+          <h2 className="users-heading">Recent Subscribers</h2>
+          <div>
+            {users.map(user => (
+              <div key={user.id} className="user-item">
+                <span className="user-email">{user.email}</span>
+                <span className="user-date">
+                  {new Date(user.createdAt).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
