@@ -91,18 +91,25 @@ const App = () => {
 
       {users.length > 0 && (
         <div className="users-container">
-          <h2 className="users-heading">Recent Subscribers</h2>
-          <div>
+          <h2 className="users-heading">Recently Joined Architects</h2>
+          <div className="users-grid">
             {users.map(user => (
-              <div key={user.id} className="user-item">
-                <span className="user-email">{user.email}</span>
-                <span className="user-date">
-                  {new Date(user.createdAt).toLocaleDateString(undefined, {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric'
-                  })}
-                </span>
+              <div key={user.id} className="glass-card">
+                <div className="avatar">
+                  {user.email.charAt(0).toUpperCase()}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                  <span className="user-email" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
+                    {user.email}
+                  </span>
+                  <span className="user-date">
+                    {new Date(user.createdAt).toLocaleDateString(undefined, {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
               </div>
             ))}
           </div>

@@ -147,23 +147,57 @@ body {
   letter-spacing: -0.01em;
 }
 
-.user-item {
-  padding: 1rem 1.25rem;
-  border-radius: 8px;
-  background-color: transparent;
-  transition: background-color 0.2s;
-  display: flex;
-  align-items: center;
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
 }
 
-.user-item:hover {
-  background-color: var(--surface-container-low);
+@keyframes floatY {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+  100% { transform: translateY(0px); }
+}
+
+.glass-card {
+  padding: 1.25rem;
+  border-radius: 12px;
+  background: rgba(249, 249, 249, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--outline-variant);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s;
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-ambient);
+}
+
+.avatar {
+  min-width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--surface), var(--surface-container-highest));
+  color: var(--on-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.125rem;
+  animation: floatY 4s ease-in-out infinite;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .user-email {
   font-size: 0.875rem;
   color: var(--on-surface);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .user-date {
@@ -172,5 +206,5 @@ body {
   opacity: 0.6;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-left: auto;
+  margin-top: 0.25rem;
 }
