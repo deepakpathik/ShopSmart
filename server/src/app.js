@@ -11,6 +11,7 @@ app.use(express.json());
 
 app.use('/api/health', healthRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/auth', require('./routes/authRoutes'));
 
 app.use(errorHandler);
 

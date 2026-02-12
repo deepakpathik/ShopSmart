@@ -208,3 +208,45 @@ body {
   letter-spacing: 0.05em;
   margin-top: 0.25rem;
 }
+
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--surface);
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--surface-container-highest);
+  border-bottom-color: var(--primary);
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  margin-bottom: 2rem;
+}
+
+.loader-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  animation: pulseOpacity 1.5s ease-in-out infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulseOpacity {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}

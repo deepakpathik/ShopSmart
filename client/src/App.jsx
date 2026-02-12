@@ -1,121 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 import './index.css';
 
 const App = () => {
-  const [healthStatus, setHealthStatus] = useState('checking');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState(null);
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchHealthAndUsers = async () => {
-      try {
-        const healthRes = await fetch('http://localhost:5005/api/health');
-        if (healthRes.ok) {
-          const data = await healthRes.json();
-          setHealthStatus(data.status);
-        } else {
-          setHealthStatus('error');
-        }
-      } catch (error) {
-        setHealthStatus('offline');
-      }
-
-      try {
-        const usersRes = await fetch('http://localhost:5005/api/users');
-        if (usersRes.ok) {
-          const usersData = await usersRes.json();
-          setUsers(usersData);
-        }
-      } catch (error) {
-      }
-    };
-    fetchHealthAndUsers();
-  }, []);
-
-  const handleSubscribe = async (e) => {
-    e.preventDefault();
-    setMessage({ type: 'checking', text: 'Subscribing...' });
-    try {
-      const res = await fetch('http://localhost:5005/api/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-      });
-      
-      if (!res.ok) {
-        throw new Error('Failed to subscribe');
-      }
-      
-      setEmail('');
-      setMessage({ type: 'ok', text: 'Subscribed successfully!' });
-      
-      const updatedUsersRes = await fetch('http://localhost:5005/api/users');
-      if (updatedUsersRes.ok) {
-        const updatedUsers = await updatedUsersRes.json();
-        setUsers(updatedUsers);
-      }
-    } catch(err) {
-      setMessage({ type: 'error', text: 'Failed to process your subscription.' });
-    }
-    
-    setTimeout(() => setMessage(null), 3000);
-  };
-
   return (
-    <div className="container">
-      <header className="hero">
-        <div className="status-badge">
-          System Status: <span className={`status ${healthStatus}`}>{healthStatus}</span>
-        </div>
-        <h1>Stay Inspired</h1>
-        <p>Subscribe for exclusive offers and our latest ShopSmart arrivals.</p>
-        
-        <form onSubmit={handleSubscribe} className="input-group">
-          <input 
-            type="email" 
-            placeholder="Enter your email" 
-            className="shadcn-input"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit" className="shadcn-button">Subscribe</button>
-        </form>
-        {message && (
-          <div style={{ marginTop: '1rem', fontSize: '0.875rem' }} className={`status ${message.type}`}>
-            {message.text}
-          </div>
-        )}
-      </header>
-
-      {users.length > 0 && (
-        <div className="users-container">
-          <h2 className="users-heading">Recently Joined Architects</h2>
-          <div className="users-grid">
-            {users.map(user => (
-              <div key={user.id} className="glass-card">
-                <div className="avatar">
-                  {user.email.charAt(0).toUpperCase()}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-                  <span className="user-email" style={{ textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                    {user.email}
-                  </span>
-                  <span className="user-date">
-                    {new Date(user.createdAt).toLocaleDateString(undefined, {
-                      year: 'numeric',
-                      month: 'short',
-                      day: 'numeric'
-                    })}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+      </Routes>
+    </Router>
   );
 };
 
