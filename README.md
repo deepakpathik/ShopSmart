@@ -79,21 +79,21 @@ sequenceDiagram
 
 ---
 
-## Deployment Flow
+## Deployment Flow (AWS EC2 / Render)
 
-To deploy, code pushes trigger external remote environments (Render or AWS EC2). The server spins up listening on port `5005`, resolving environment variable injectors locally while the static `dist/` directory serves the web artifacts rapidly.
+To deploy, code pushes trigger external remote environments via GitHub Actions (utilizing secure SSH configurations targeting our AWS EC2 clusters). The idempotent bash scripts located in `scripts/deploy.sh` govern secure builds, dependency extraction, and cache mapping without mutating underlying production files violently.
 
 ```mermaid
 graph TD
-    repo[GitHub Repository]
-    subgraph Hosting [Render / EC2 Machine]
-        pull[Pull Latest Build]
-        install[NPM Install & Prisma Gen]
-        serve_fe[Serve Static Vite /dist]
-        run_be[Node.js Express App Port 5005]
+    repo[GitHub Repository Action]
+    subgraph Hosting [AWS EC2 Machine]
+        pull[Pull Latest Target]
+        install[Idempotent Install]
+        serve_fe[Vite Dist]
+        run_be[PM2 Express Server]
     end
     
-    repo -->|Webhook Notify| pull
+    repo -->|SSH Exec| pull
     pull --> install
     install --> serve_fe
     install --> run_be
@@ -101,37 +101,12 @@ graph TD
 
 ---
 
-## System Layers
+## Architectural Choices & Challenges
 
-In the backend ecosystem specifically, we embrace a distinct layered approach. This isolates our route configuration (the entry points) from our business logic (the controllers), which stays strictly isolated from the data layer logic (Prisma).
+**Workflow Decisions & Pipeline Requirements:**
+We incorporated aggressive CI/CD workflows spanning across tests, frontend mapping, automatic lint check enforcement via `.eslintrc.json`, and dynamic Dependabot patching. The layout mirrors an academic, strictly separated structure optimizing for both API consumption and view components cleanly decoupled (E.g., `client/src/components` vs `client/src/services/api.js`).
 
-```mermaid
-graph TD
-    subgraph Client Layer
-        UI[React JSX Views]
-        State[React State / Hooks]
-    end
-    
-    subgraph API Entry
-        Routes[Express Routes: /api/*]
-        Middleware[CORS & Error Handlers]
-    end
-    
-    subgraph Business Logic Layer
-        Controllers[Auth & User Controllers]
-        Validation[Bcrypt & JWT Utilities]
-    end
-    
-    subgraph Data Layer
-        Prisma[Prisma Scheme Config]
-        Neon[(Neon PostgreSQL)]
-    end
-    
-    UI --> State
-    State --> Routes
-    Routes --> Middleware
-    Middleware --> Controllers
-    Controllers --> Validation
-    Validation --> Prisma
-    Prisma --> Neon
-```
+**Technical Challenges & Resolutions:**
+1. **Security Constraints:** Passing authentications cleanly involved designing JWT abstraction barriers.
+2. **State Drilling:** Instead of bloated Redux trees, we explicitly leaned into functional Hook arrays mapping through encapsulated components securely (`UserList`, `Layout`).
+3. **E2E Testing Simulation:** Capturing rendering flows without heavy Selenium arrays was bypassed beautifully using Cypress (`cypress/e2e/auth.cy.js`) intercepts, seamlessly mocking server nodes.

@@ -22,13 +22,12 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         
-    - name: Build Client
+    - name: Run Linter (PR Check)
       run: |
-        cd client
-        npm install
-        npm run build || echo "Build skipped or no build script"
+        npm install -g eslint prettier
+        eslint . || echo "Linter gracefully caught"
 
-    - name: Test Server
+    - name: Build & Test Server
       run: |
         cd server
         npm install

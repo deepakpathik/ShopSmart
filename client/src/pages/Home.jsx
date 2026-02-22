@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import Layout from '../components/Layout';
+import UserList from '../components/UserList';
 
 const SparkleIcon = () => (
   <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,15 +43,7 @@ const Home = () => {
   }
 
   return (
-    <div style={{ width: '100%', minHeight: '100vh', padding: '1.5rem 2rem' }}>
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', padding: '1rem 2rem', background: 'var(--surface-container-lowest)', borderRadius: 'var(--radius-full)', boxShadow: '0 4px 20px rgba(136,0,222,0.05)' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: 'var(--primary)' }}>ShopSmart</h2>
-        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-          <Link to="/login" style={{ textDecoration: 'none', color: 'var(--on-surface)', fontSize: '1rem', fontWeight: 700 }}>Login</Link>
-          <Link to="/signup" className="shadcn-button secondary" style={{ height: '3rem', fontSize: '1rem' }}>Get Started</Link>
-        </div>
-      </nav>
-
+    <Layout>
       <div className="container" style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto', marginBottom: '5rem' }}>
         <header className="hero">
           <div style={{ position: 'relative', display: 'inline-block', zIndex: 1 }}>
@@ -101,8 +95,10 @@ const Home = () => {
           </div>
 
         </div>
+
+        <UserList />
       </div>
-    </div>
+    </Layout>
   );
 };
 
