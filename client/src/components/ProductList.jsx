@@ -1,45 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import ProductCard from './ProductCard';
+import { fetchProducts, fetchTopProducts } from '../services/api';
 
-const ProductList = () => {
+const ProductList = ({ limit, hideFilter, topOnly }) => {
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const loadProducts = async (query = '') => {
+    try {
+      setLoading(true);
+      const data = topOnly
+        ? await fetchTopProducts()
+        : await fetchProducts(query);
+      setProducts(data);
+      setError(null);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [productsRes, categoriesRes] = await Promise.all([
-          fetch('https://fakestoreapi.com/products'),
-          fetch('https://fakestoreapi.com/products/categories')
-        ]);
-        
-        if (!productsRes.ok || !categoriesRes.ok) {
-          throw new Error('Failed to fetch data');
-        }
+    loadProducts();
+  }, [topOnly]);
 
-        const productsData = await productsRes.json();
-        const categoriesData = await categoriesRes.json();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    loadProducts(search);
+  };
 
-        setProducts(productsData);
-        setCategories(categoriesData);
-        setError(null);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const filteredProducts = selectedCategory 
-    ? products.filter(p => p.category === selectedCategory)
-    : products;
+  const displayProducts = limit ? products.slice(0, limit) : products;
 
   if (loading) {
     return (
@@ -59,37 +52,35 @@ const ProductList = () => {
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap gap-2 mb-10">
-        <button
-          onClick={() => setSelectedCategory('')}
-          className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${
-            selectedCategory === '' 
-              ? 'bg-gray-900 text-white shadow-md' 
-              : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-          }`}
-        >
-          All
-        </button>
-        {categories.map(category => (
+      {!hideFilter && (
+        <form onSubmit={handleSearch} className="flex gap-3 mb-10 max-w-xl">
+          <input
+            type="text"
+            placeholder="Search products by title..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="flex-1 px-5 py-3 rounded-xl border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+          />
           <button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-5 py-2.5 rounded-full text-sm font-semibold capitalize transition-colors ${
-              selectedCategory === category 
-                ? 'bg-gray-900 text-white shadow-md' 
-                : 'bg-white border border-gray-200 text-gray-600 hover:bg-gray-50'
-            }`}
+            type="submit"
+            className="px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-colors shadow-sm"
           >
-            {category}
+            Search
           </button>
-        ))}
-      </div>
-      
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {filteredProducts.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+        </form>
+      )}
+
+      {displayProducts.length === 0 ? (
+        <div className="text-center py-16 text-muted-foreground">
+          No products found.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {displayProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

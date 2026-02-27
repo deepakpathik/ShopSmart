@@ -6,7 +6,7 @@ export const loginUser = async (credentials) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials)
   });
-  
+
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Login failed');
   return data;
@@ -18,15 +18,36 @@ export const registerUser = async (credentials) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(credentials)
   });
-  
+
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Signup failed');
   return data;
 };
 
-export const fetchUsers = async () => {
-  const res = await fetch(`${API_URL}/api/users`);
+export const fetchMe = async () => {
+  const token = localStorage.getItem('token');
+  const res = await fetch(`${API_URL}/api/auth/me`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Failed to fetch users');
+  if (!res.ok) throw new Error(data.error || 'Failed to fetch profile');
+  return data;
+};
+
+export const fetchProducts = async (search = '') => {
+  const url = search
+    ? `${API_URL}/api/products?search=${encodeURIComponent(search)}`
+    : `${API_URL}/api/products`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to fetch products');
+  return data;
+};
+
+export const fetchTopProducts = async () => {
+  const res = await fetch(`${API_URL}/api/products/top`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to fetch top products');
   return data;
 };
