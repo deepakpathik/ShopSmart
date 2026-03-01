@@ -2,34 +2,58 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   test:
+    name: Lint & Test
     runs-on: ubuntu-latest
-    
+
     strategy:
       matrix:
         node-version: [18.x, 20.x]
 
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        
-    - name: Run Linter (PR Check)
-      run: |
-        npm install -g eslint prettier
-        eslint . || echo "Linter gracefully caught"
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Build & Test Server
-      run: |
-        cd server
-        npm install
-        npx prisma generate
-        npm test
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: |
+            server/package-lock.json
+            client/package-lock.json
+
+      - name: Install Backend Dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Run Prisma Generate
+        working-directory: ./server
+        run: npx prisma generate
+
+      - name: Install Frontend Dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Lint Backend
+        working-directory: ./server
+        run: npm run lint --if-present
+
+      - name: Lint Frontend
+        working-directory: ./client
+        run: npm run lint --if-present
+
+      - name: Test Backend (Jest)
+        working-directory: ./server
+        run: npm test
+
+      - name: Test Frontend
+        working-directory: ./client
+        run: npm test -- --run
