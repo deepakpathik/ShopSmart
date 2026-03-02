@@ -5,6 +5,7 @@ const healthRoutes = require('./routes/healthRoutes');
 const userRoutes = require('./routes/userRoutes');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 const errorHandler = require('./middlewares/errorHandler');
 
 const app = express();
@@ -17,6 +18,7 @@ app.use('/api/health', healthRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 app.use(errorHandler);
 

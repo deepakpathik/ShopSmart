@@ -33,3 +33,11 @@ model Product {
   seller      User     @relation(fields: [sellerId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
 }
+
+model Feedback {
+  id        String   @id @default(uuid())
+  name      String
+  message   String
+  rating    Int
+  createdAt DateTime @default(now())
+}

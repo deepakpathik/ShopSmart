@@ -97,7 +97,15 @@ async function main() {
 
   await prisma.product.createMany({ data: products });
 
-  console.log(`Seeded: 1 admin, 2 sellers, ${products.length} products`);
+  await prisma.feedback.createMany({
+    data: [
+      { name: 'John Doe', message: 'Great service, highly recommend!', rating: 5 },
+      { name: 'Jane Smith', message: 'Good quality products, but delivery was a bit slow.', rating: 4 },
+      { name: 'Alice Johnson', message: 'Excellent support, very helpful.', rating: 5 },
+    ]
+  });
+
+  console.log(`Seeded: 1 admin, 2 sellers, ${products.length} products, 3 feedbacks`);
   console.log('Login credentials for all users: password123');
   console.log(`  Admin:   ${admin.email}`);
   console.log(`  Seller:  ${seller1.email}`);
