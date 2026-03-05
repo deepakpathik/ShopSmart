@@ -101,6 +101,36 @@ graph TD
 
 ---
 
+## Key Features
+- **Decoupled Architecture**: Strictly separated frontend and backend services.
+- **Electric Fizz Design**: A beautiful, modern React UI with responsive layouts.
+- **Feedback System**: A real-time customer review system allowing users to share experiences.
+- **Robust CI/CD**: Automated testing and deployment via GitHub Actions.
+
+---
+
+## Testing Instructions
+
+Our project maintains high code quality through a multi-layered testing strategy.
+
+### Backend Tests (Jest)
+Located in `server/tests/`. To run:
+```bash
+cd server
+npm test
+```
+*Tests include: Auth controller units, Feedback controller units, and API integration tests.*
+
+### Frontend Tests (Vitest)
+Located alongside components (`*.test.jsx`). To run:
+```bash
+cd client
+npm run test
+```
+*Tests include: Component rendering, form validation, and page-level integration tests.*
+
+---
+
 ## Architectural Choices & Challenges
 
 **Workflow Decisions & Pipeline Requirements:**
