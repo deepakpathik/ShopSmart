@@ -1,25 +1,35 @@
-#!/usr/bin/env bash
+# 1. Environment & Pre-requisites
+if [ ! -f "server/.env" ]; then
+    echo "Warning: .env file missing in server directory."
+fi
 
-set -e
+# 2. Safe Directory Creation
+mkdir -p logs build_cache
 
-mkdir -p logs
-mkdir -p build_cache
-
-echo "Installing server dependencies..."
+# 3. Backend Deployment
+echo ">>> Deploying Backend..."
 cd server
-npm ci --production || npm install --production
+npm ci --production
 
-echo "Syncing Database..."
+echo ">>> Syncing Database Schema..."
 npx prisma generate
-# Use migrate deploy instead of db push for safe production migrations
 npx prisma migrate deploy
 
-echo "Restarting backend server..."
-pm2 restart shopsmart-backend || pm2 start src/index.js --name shopsmart-backend
+echo ">>> Managing Backend Process (PM2)..."
+# Check if process is already running
+if pm2 show shopsmart-backend > /dev/null 2>&1; then
+    echo "Restarting existing process..."
+    pm2 restart shopsmart-backend --update-env
+else
+    echo "Starting new process..."
+    pm2 start src/index.js --name shopsmart-backend
+fi
+pm2 save
 
-echo "Installing routing capabilities..."
+# 4. Frontend Deployment
+echo ">>> Deploying Frontend..."
 cd ../client
-npm ci || npm install
+npm ci
 npm run build
 
-echo "Deployment cycle finished securely."
+echo ">>> Deployment successfully completed (Idempotent)."
