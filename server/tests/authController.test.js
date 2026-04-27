@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken');
 jest.mock('../src/config/db', () => ({
   user: {
     findUnique: jest.fn(),
-    create: jest.fn()
-  }
+    create: jest.fn(),
+  },
 }));
 
 jest.mock('bcrypt');
@@ -21,12 +21,12 @@ describe('Auth Controller', () => {
     mockReq = {
       body: {
         email: 'test@shopsmart.com',
-        password: 'password123'
-      }
+        password: 'password123',
+      },
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     jest.clearAllMocks();
   });
@@ -54,12 +54,12 @@ describe('Auth Controller', () => {
       await signup(mockReq, mockRes);
 
       expect(prisma.user.create).toHaveBeenCalledWith({
-        data: { email: 'test@shopsmart.com', password: 'hashed_pwd' }
+        data: { email: 'test@shopsmart.com', password: 'hashed_pwd' },
       });
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith({
         token: 'fake_jwt_token',
-        user: { id: 'user1', email: 'test@shopsmart.com' }
+        user: { id: 'user1', email: 'test@shopsmart.com' },
       });
     });
   });
@@ -85,7 +85,11 @@ describe('Auth Controller', () => {
     });
 
     it('returns token on valid credentials', async () => {
-      prisma.user.findUnique.mockResolvedValue({ id: 'user1', email: 'test@shopsmart.com', password: 'hashed_pwd' });
+      prisma.user.findUnique.mockResolvedValue({
+        id: 'user1',
+        email: 'test@shopsmart.com',
+        password: 'hashed_pwd',
+      });
       bcrypt.compare.mockResolvedValue(true);
       jwt.sign.mockReturnValue('fake_jwt_token');
 
@@ -93,7 +97,7 @@ describe('Auth Controller', () => {
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith({
         token: 'fake_jwt_token',
-        user: { id: 'user1', email: 'test@shopsmart.com' }
+        user: { id: 'user1', email: 'test@shopsmart.com' },
       });
     });
   });

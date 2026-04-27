@@ -26,15 +26,15 @@ const signup = async (req, res, next) => {
         email,
         password: hashedPassword,
         name: name || '',
-        role: userRole
-      }
+        role: userRole,
+      },
     });
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '12h' });
 
     return res.status(201).json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role }
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
   } catch (err) {
     next(err);
@@ -63,7 +63,7 @@ const login = async (req, res, next) => {
 
     return res.status(200).json({
       token,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role }
+      user: { id: user.id, email: user.email, name: user.name, role: user.role },
     });
   } catch (err) {
     next(err);
@@ -75,12 +75,12 @@ const getMe = async (req, res) => {
     id: req.user.id,
     email: req.user.email,
     name: req.user.name,
-    role: req.user.role
+    role: req.user.role,
   });
 };
 
 module.exports = {
   signup,
   login,
-  getMe
+  getMe,
 };

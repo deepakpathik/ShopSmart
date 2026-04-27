@@ -7,7 +7,7 @@ const {
   getProducts,
   getTopProducts,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 } = require('../controllers/productController');
 
 const router = express.Router();
@@ -15,27 +15,16 @@ const router = express.Router();
 router.get('/', getProducts);
 router.get('/top', getTopProducts);
 
-router.post(
-  '/',
-  authenticate,
-  authorize('ADMIN', 'SELLER'),
-  upload.single('image'),
-  createProduct
-);
+router.post('/', authenticate, authorize('ADMIN', 'SELLER'), upload.single('image'), createProduct);
 
 router.put(
   '/:id',
   authenticate,
   authorize('ADMIN', 'SELLER'),
   upload.single('image'),
-  updateProduct
+  updateProduct,
 );
 
-router.delete(
-  '/:id',
-  authenticate,
-  authorize('ADMIN', 'SELLER'),
-  deleteProduct
-);
+router.delete('/:id', authenticate, authorize('ADMIN', 'SELLER'), deleteProduct);
 
 module.exports = router;

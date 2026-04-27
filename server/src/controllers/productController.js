@@ -16,9 +16,9 @@ const createProduct = async (req, res, next) => {
         description,
         price: parseFloat(price),
         imageUrl,
-        sellerId: req.user.id
+        sellerId: req.user.id,
       },
-      include: { seller: { select: { id: true, name: true, email: true } } }
+      include: { seller: { select: { id: true, name: true, email: true } } },
     });
 
     return res.status(201).json(product);
@@ -31,14 +31,12 @@ const getProducts = async (req, res, next) => {
   try {
     const { search } = req.query;
 
-    const where = search
-      ? { title: { contains: search, mode: 'insensitive' } }
-      : {};
+    const where = search ? { title: { contains: search, mode: 'insensitive' } } : {};
 
     const products = await prisma.product.findMany({
       where,
       include: { seller: { select: { id: true, name: true, email: true } } },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     return res.status(200).json(products);
@@ -52,7 +50,7 @@ const getTopProducts = async (req, res, next) => {
     const products = await prisma.product.findMany({
       take: 5,
       orderBy: { createdAt: 'desc' },
-      include: { seller: { select: { id: true, name: true, email: true } } }
+      include: { seller: { select: { id: true, name: true, email: true } } },
     });
 
     return res.status(200).json(products);
@@ -84,9 +82,9 @@ const updateProduct = async (req, res, next) => {
         title: title || existing.title,
         description: description || existing.description,
         price: price !== undefined ? parseFloat(price) : existing.price,
-        imageUrl
+        imageUrl,
       },
-      include: { seller: { select: { id: true, name: true, email: true } } }
+      include: { seller: { select: { id: true, name: true, email: true } } },
     });
 
     return res.status(200).json(product);
@@ -122,5 +120,5 @@ module.exports = {
   getProducts,
   getTopProducts,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };

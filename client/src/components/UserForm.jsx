@@ -18,9 +18,7 @@ const UserForm = ({ mode, onSubmitAction }) => {
     setMessage({ type: 'checking', text: 'Processing...' });
 
     try {
-      const payload = isLogin
-        ? { email, password }
-        : { email, password, name, role };
+      const payload = isLogin ? { email, password } : { email, password, name, role };
 
       const data = await onSubmitAction(payload);
       setMessage({ type: 'ok', text: isLogin ? 'Login successful!' : 'Account created!' });
@@ -55,7 +53,7 @@ const UserForm = ({ mode, onSubmitAction }) => {
                   placeholder="John Doe"
                   className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                   value={name}
-                  onChange={e => setName(e.target.value)}
+                  onChange={(e) => setName(e.target.value)}
                   autoComplete="name"
                 />
               </div>
@@ -69,7 +67,7 @@ const UserForm = ({ mode, onSubmitAction }) => {
                 placeholder="you@example.com"
                 className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="email"
               />
@@ -83,7 +81,7 @@ const UserForm = ({ mode, onSubmitAction }) => {
                 placeholder="••••••••"
                 className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete={isLogin ? 'current-password' : 'new-password'}
                 minLength={6}
@@ -96,7 +94,7 @@ const UserForm = ({ mode, onSubmitAction }) => {
                 </label>
                 <select
                   value={role}
-                  onChange={e => setRole(e.target.value)}
+                  onChange={(e) => setRole(e.target.value)}
                   className="flex h-11 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-colors"
                   style={{ cursor: 'pointer' }}
                 >
@@ -105,17 +103,25 @@ const UserForm = ({ mode, onSubmitAction }) => {
                 </select>
               </div>
             )}
-            <Button type="submit" size="lg" className="w-full mt-6 text-base font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity">
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full mt-6 text-base font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-opacity"
+            >
               {isLogin ? 'Login' : 'Sign Up'}
             </Button>
           </form>
 
           {message && (
-            <div className={`mt-6 p-4 rounded-lg text-sm font-medium text-center shadow-sm ${
-              message.type === 'ok' ? 'bg-green-50 text-green-800 border border-green-200' :
-              message.type === 'error' ? 'bg-red-50 text-red-800 border border-red-200' :
-              'bg-blue-50 text-blue-800 border border-blue-200'
-            }`}>
+            <div
+              className={`mt-6 p-4 rounded-lg text-sm font-medium text-center shadow-sm ${
+                message.type === 'ok'
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : message.type === 'error'
+                    ? 'bg-red-50 text-red-800 border border-red-200'
+                    : 'bg-blue-50 text-blue-800 border border-blue-200'
+              }`}
+            >
               {message.text}
             </div>
           )}

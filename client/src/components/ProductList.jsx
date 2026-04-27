@@ -11,9 +11,7 @@ const ProductList = ({ limit, hideFilter, topOnly }) => {
   const loadProducts = async (query = '') => {
     try {
       setLoading(true);
-      const data = topOnly
-        ? await fetchTopProducts()
-        : await fetchProducts(query);
+      const data = topOnly ? await fetchTopProducts() : await fetchProducts(query);
       setProducts(data);
       setError(null);
     } catch (err) {
@@ -58,7 +56,7 @@ const ProductList = ({ limit, hideFilter, topOnly }) => {
             type="text"
             placeholder="Search products by title..."
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={(e) => setSearch(e.target.value)}
             className="flex-1 px-5 py-3 rounded-xl border border-gray-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
           />
           <button
@@ -71,12 +69,10 @@ const ProductList = ({ limit, hideFilter, topOnly }) => {
       )}
 
       {displayProducts.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
-          No products found.
-        </div>
+        <div className="text-center py-16 text-muted-foreground">No products found.</div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {displayProducts.map(product => (
+          {displayProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>

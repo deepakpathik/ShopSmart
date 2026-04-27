@@ -5,9 +5,13 @@
     "node": true,
     "jest": true
   },
+  "globals": {
+    "cy": "readonly"
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react/jsx-runtime",
     "plugin:prettier/recommended"
   ],
   "parserOptions": {

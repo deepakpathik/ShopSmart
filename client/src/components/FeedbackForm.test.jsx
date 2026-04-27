@@ -12,7 +12,7 @@ describe('FeedbackForm Component', () => {
 
   it('renders form fields correctly', () => {
     render(<FeedbackForm onFeedbackAdded={mockOnFeedbackAdded} />);
-    
+
     expect(screen.getByText('Share Your Experience')).toBeInTheDocument();
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/message/i)).toBeInTheDocument();
@@ -27,17 +27,17 @@ describe('FeedbackForm Component', () => {
     });
 
     render(<FeedbackForm onFeedbackAdded={mockOnFeedbackAdded} />);
-    
+
     fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'John' } });
     fireEvent.change(screen.getByLabelText(/message/i), { target: { value: 'Great' } });
     fireEvent.change(screen.getByLabelText(/rating/i), { target: { value: '5' } });
-    
+
     fireEvent.click(screen.getByRole('button', { name: /submit feedback/i }));
 
     await waitFor(() => {
       expect(mockOnFeedbackAdded).toHaveBeenCalledWith(mockData);
     });
-    
+
     // Check if form cleared
     expect(screen.getByLabelText(/name/i).value).toBe('');
     expect(screen.getByLabelText(/message/i).value).toBe('');
@@ -49,7 +49,7 @@ describe('FeedbackForm Component', () => {
     });
 
     render(<FeedbackForm onFeedbackAdded={mockOnFeedbackAdded} />);
-    
+
     fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Error User' } });
     fireEvent.change(screen.getByLabelText(/message/i), { target: { value: 'This will fail' } });
     fireEvent.click(screen.getByRole('button', { name: /submit feedback/i }));
@@ -63,11 +63,11 @@ describe('FeedbackForm Component', () => {
     global.fetch.mockReturnValue(new Promise(() => {})); // Never resolves
 
     render(<FeedbackForm onFeedbackAdded={mockOnFeedbackAdded} />);
-    
+
     fireEvent.change(screen.getByLabelText(/name/i), { target: { value: 'Loading User' } });
     fireEvent.change(screen.getByLabelText(/message/i), { target: { value: 'Wait for it' } });
     fireEvent.click(screen.getByRole('button', { name: /submit feedback/i }));
-    
+
     await waitFor(() => {
       expect(screen.getByRole('button')).toBeDisabled();
     });

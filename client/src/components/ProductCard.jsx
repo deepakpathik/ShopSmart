@@ -4,9 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 const ProductCard = ({ product }) => {
-  const imageUrl = product.imageUrl
-    ? `${API_URL}${product.imageUrl}`
-    : null;
+  const imageUrl = product.imageUrl ? `${API_URL}${product.imageUrl}` : null;
 
   const sellerName = product.seller?.name || product.seller?.email || 'Unknown Seller';
 
@@ -21,7 +19,17 @@ const ProductCard = ({ product }) => {
           />
         ) : (
           <div className="flex flex-col items-center gap-2 text-gray-300">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
               <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
               <circle cx="9" cy="9" r="2" />
               <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
@@ -41,9 +49,7 @@ const ProductCard = ({ product }) => {
       </CardHeader>
 
       <CardContent className="flex flex-col flex-1 px-5 pb-5">
-        <p className="text-sm text-gray-500 line-clamp-2 mb-4">
-          {product.description}
-        </p>
+        <p className="text-sm text-gray-500 line-clamp-2 mb-4">{product.description}</p>
         <div className="flex items-end justify-between mt-auto pt-2">
           <span className="text-xl font-bold tracking-tight text-gray-900">
             ₹{Number(product.price).toLocaleString('en-IN')}

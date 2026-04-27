@@ -19,7 +19,9 @@ const Home = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background">
         <div className="w-16 h-16 rounded-full bg-gradient-to-r from-primary via-secondary to-accent animate-spin flex inset-0 shadow-xl shadow-primary/20"></div>
-        <p className="mt-6 text-primary font-bold tracking-widest uppercase animate-pulse">Loading...</p>
+        <p className="mt-6 text-primary font-bold tracking-widest uppercase animate-pulse">
+          Loading...
+        </p>
       </div>
     );
   }
@@ -32,28 +34,31 @@ const Home = () => {
 
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white shadow-sm border border-border mb-8">
             <span className="flex h-2 w-2 rounded-full bg-secondary"></span>
-            <span className="text-sm font-semibold text-foreground">Vendor Marketplace is Live</span>
+            <span className="text-sm font-semibold text-foreground">
+              Vendor Marketplace is Live
+            </span>
           </div>
 
           <h1 className="text-5xl md:text-8xl font-extrabold tracking-tighter leading-tight mb-8">
-            Shop the <span className="gradient-text">Future</span> of <br/> Premium Goods.
+            Shop the <span className="gradient-text">Future</span> of <br /> Premium Goods.
           </h1>
           <p className="text-lg md:text-2xl text-muted-foreground font-medium max-w-2xl mb-12">
-            A simplified marketplace where trusted sellers list curated products. Browse, discover, and buy with confidence.
+            A simplified marketplace where trusted sellers list curated products. Browse, discover,
+            and buy with confidence.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center w-full sm:w-auto">
             <Button
-               size="lg"
-               className="bg-gradient-to-r from-primary to-secondary text-white hover:opacity-90 rounded-xl px-10 py-7 text-lg shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 transition-all hover:-translate-y-1"
-               onClick={() => navigate('/products')}
+              size="lg"
+              className="bg-gradient-to-r from-primary to-secondary text-white hover:opacity-90 rounded-xl px-10 py-7 text-lg shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/40 transition-all hover:-translate-y-1"
+              onClick={() => navigate('/products')}
             >
               Start Shopping
             </Button>
             <Button
-               size="lg"
-               variant="outline"
-               className="rounded-xl px-10 py-7 text-lg border-2 hover:bg-surface-container-low transition-all"
-               onClick={() => navigate('/signup')}
+              size="lg"
+              variant="outline"
+              className="rounded-xl px-10 py-7 text-lg border-2 hover:bg-surface-container-low transition-all"
+              onClick={() => navigate('/signup')}
             >
               Become a Seller
             </Button>
@@ -61,14 +66,14 @@ const Home = () => {
         </header>
 
         <div className="py-12">
-           <div className="flex items-center justify-between mb-8">
-             <h2 className="text-3xl font-extrabold tracking-tight">Top Picks 🔥</h2>
-             <Link to="/products" className="text-primary font-bold hover:underline">
-                View All Products
-             </Link>
-           </div>
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-3xl font-extrabold tracking-tight">Top Picks 🔥</h2>
+            <Link to="/products" className="text-primary font-bold hover:underline">
+              View All Products
+            </Link>
+          </div>
 
-           <ProductList topOnly={true} hideFilter={true} />
+          <ProductList topOnly={true} hideFilter={true} />
         </div>
       </div>
     </Layout>

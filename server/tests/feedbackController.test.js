@@ -59,7 +59,7 @@ describe('Feedback Controller', () => {
       await createFeedback(mockReq, mockRes, next);
 
       expect(prisma.feedback.create).toHaveBeenCalledWith({
-        data: { name: 'New User', message: 'Good', rating: 4 }
+        data: { name: 'New User', message: 'Good', rating: 4 },
       });
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith(createdFeedback);

@@ -7,7 +7,7 @@ const createUser = async (req, res) => {
       return res.status(400).json({ error: 'Email is required' });
     }
     const user = await prisma.user.create({
-      data: { email }
+      data: { email },
     });
     return res.status(201).json(user);
   } catch (error) {
@@ -29,5 +29,5 @@ const getUsers = async (req, res) => {
 
 module.exports = {
   createUser,
-  getUsers
+  getUsers,
 };

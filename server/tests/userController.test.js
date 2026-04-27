@@ -4,8 +4,8 @@ const prisma = require('../src/config/db');
 jest.mock('../src/config/db', () => ({
   user: {
     create: jest.fn(),
-    findMany: jest.fn()
-  }
+    findMany: jest.fn(),
+  },
 }));
 
 describe('User Controller', () => {
@@ -14,11 +14,11 @@ describe('User Controller', () => {
 
   beforeEach(() => {
     mockReq = {
-      body: {}
+      body: {},
     };
     mockRes = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     jest.clearAllMocks();
   });
@@ -42,7 +42,7 @@ describe('User Controller', () => {
     it('returns 200 with list of users', async () => {
       const users = [{ id: '1', email: 'test@shopsmart.com' }];
       prisma.user.findMany.mockResolvedValue(users);
-      
+
       await getUsers(mockReq, mockRes);
       expect(mockRes.status).toHaveBeenCalledWith(200);
       expect(mockRes.json).toHaveBeenCalledWith(users);

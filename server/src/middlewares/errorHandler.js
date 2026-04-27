@@ -2,7 +2,7 @@ const errorHandler = (err, req, res, _next) => {
   if (err.name === 'MulterError') {
     const messages = {
       LIMIT_FILE_SIZE: 'File too large. Maximum size is 5MB',
-      LIMIT_UNEXPECTED_FILE: 'Unexpected file field'
+      LIMIT_UNEXPECTED_FILE: 'Unexpected file field',
     };
     return res.status(400).json({ error: messages[err.code] || err.message });
   }
@@ -16,7 +16,7 @@ const errorHandler = (err, req, res, _next) => {
 
   res.status(statusCode).json({
     error: message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
+    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
   });
 };
 

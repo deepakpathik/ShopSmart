@@ -14,7 +14,10 @@ const FeedbackList = ({ feedbacks, loading, error }) => {
           <div key={f.id} className="bg-gray-50 p-4 rounded-lg border border-gray-100">
             <div className="flex justify-between items-center mb-2">
               <span className="font-bold">{f.name}</span>
-              <span className="text-yellow-500">{'★'.repeat(f.rating)}{'☆'.repeat(5 - f.rating)}</span>
+              <span className="text-yellow-500">
+                {'★'.repeat(f.rating)}
+                {'☆'.repeat(5 - f.rating)}
+              </span>
             </div>
             <p className="text-gray-600">{f.message}</p>
             <span className="text-xs text-gray-400 mt-2 block">

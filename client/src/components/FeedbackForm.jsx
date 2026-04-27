@@ -16,7 +16,7 @@ const FeedbackForm = ({ onFeedbackAdded }) => {
       const res = await fetch('http://localhost:5001/api/feedback', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, message, rating })
+        body: JSON.stringify({ name, message, rating }),
       });
 
       if (!res.ok) throw new Error('Failed to submit feedback');
@@ -38,7 +38,9 @@ const FeedbackForm = ({ onFeedbackAdded }) => {
       <h3 className="text-xl font-bold mb-4">Share Your Experience</h3>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            Name
+          </label>
           <input
             id="name"
             type="text"
@@ -49,7 +51,9 @@ const FeedbackForm = ({ onFeedbackAdded }) => {
           />
         </div>
         <div>
-          <label htmlFor="message" className="block text-sm font-medium text-gray-700">Message</label>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700">
+            Message
+          </label>
           <textarea
             id="message"
             value={message}
@@ -60,7 +64,9 @@ const FeedbackForm = ({ onFeedbackAdded }) => {
           ></textarea>
         </div>
         <div>
-          <label htmlFor="rating" className="block text-sm font-medium text-gray-700">Rating</label>
+          <label htmlFor="rating" className="block text-sm font-medium text-gray-700">
+            Rating
+          </label>
           <select
             id="rating"
             value={rating}

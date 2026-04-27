@@ -4,7 +4,7 @@ export const loginUser = async (credentials) => {
   const res = await fetch(`${API_URL}/api/auth/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials)
+    body: JSON.stringify(credentials),
   });
 
   const data = await res.json();
@@ -16,7 +16,7 @@ export const registerUser = async (credentials) => {
   const res = await fetch(`${API_URL}/api/auth/signup`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials)
+    body: JSON.stringify(credentials),
   });
 
   const data = await res.json();
@@ -27,7 +27,7 @@ export const registerUser = async (credentials) => {
 export const fetchMe = async () => {
   const token = localStorage.getItem('token');
   const res = await fetch(`${API_URL}/api/auth/me`, {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   const data = await res.json();
