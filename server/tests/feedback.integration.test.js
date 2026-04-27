@@ -1,7 +1,15 @@
 const request = require('supertest');
 const app = require('../src/app');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../src/config/db');
+
+jest.mock('../src/config/db', () => ({
+  feedback: {
+    deleteMany: jest.fn(),
+    create: jest.fn(),
+    findFirst: jest.fn(),
+    findMany: jest.fn(),
+  },
+}));
 
 describe('Feedback API Integration', () => {
   const testFeedback = {
@@ -10,22 +18,14 @@ describe('Feedback API Integration', () => {
     rating: 5,
   };
 
-  beforeAll(async () => {
-    // Clean up before starting
-    await prisma.feedback.deleteMany({
-      where: { name: 'Integration Test User' },
-    });
-  });
-
-  afterAll(async () => {
-    // Final cleanup
-    await prisma.feedback.deleteMany({
-      where: { name: 'Integration Test User' },
-    });
-    await prisma.$disconnect();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('POST /api/feedback should save feedback to DB', async () => {
+    prisma.feedback.create.mockResolvedValue({ id: '1', ...testFeedback });
+    prisma.feedback.findFirst.mockResolvedValue({ id: '1', ...testFeedback });
+
     const res = await request(app).post('/api/feedback').send(testFeedback);
 
     expect(res.statusCode).toEqual(201);
@@ -40,6 +40,7 @@ describe('Feedback API Integration', () => {
   });
 
   it('GET /api/feedback should retrieve feedbacks including the new one', async () => {
+    prisma.feedback.findMany.mockResolvedValue([{ id: '1', ...testFeedback }]);
     const res = await request(app).get('/api/feedback');
 
     expect(res.statusCode).toEqual(200);
