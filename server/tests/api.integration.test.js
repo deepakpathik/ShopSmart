@@ -1,13 +1,13 @@
-const request = require('supertest');
-const app = require('../src/app');
-const prisma = require('../src/config/db');
-
 jest.mock('../src/config/db', () => ({
   user: {
     create: jest.fn(),
     findUnique: jest.fn(),
   },
 }));
+
+const request = require('supertest');
+const app = require('../src/app');
+const prisma = require('../src/config/db');
 
 describe('API Integration', () => {
   beforeEach(() => {
