@@ -42,22 +42,7 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:backend-latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # --- Deploy Backend to ECS ---
-      - name: Fill in new Backend Image ID in Task Definition
-        id: task-def-backend
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: deployment/aws/backend-task-def.json
-          container-name: backend
-          image: ${{ steps.build-backend.outputs.image }}
 
-      - name: Deploy Backend Service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def-backend.outputs.task-definition }}
-          service: backend-service
-          cluster: ShopSmart-Cluster
-          wait-for-service-stability: true
 
       # --- Build & Push Frontend ---
       - name: Build and Push Frontend Image
@@ -72,19 +57,4 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:frontend-latest
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
-      # --- Deploy Frontend to ECS ---
-      - name: Fill in new Frontend Image ID in Task Definition
-        id: task-def-frontend
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: deployment/aws/frontend-task-def.json
-          container-name: frontend
-          image: ${{ steps.build-frontend.outputs.image }}
 
-      - name: Deploy Frontend Service
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.task-def-frontend.outputs.task-definition }}
-          service: frontend-service
-          cluster: ShopSmart-Cluster
-          wait-for-service-stability: true
