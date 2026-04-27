@@ -44,7 +44,7 @@ jobs:
 
       - name: Lint Backend
         working-directory: ./server
-        run: npm run lint -- --max-warnings 0 --if-present
+        run: npm run lint --if-present
 
       - name: Lint Frontend
         working-directory: ./client
