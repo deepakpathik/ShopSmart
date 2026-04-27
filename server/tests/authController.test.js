@@ -54,7 +54,12 @@ describe('Auth Controller', () => {
       await signup(mockReq, mockRes);
 
       expect(prisma.user.create).toHaveBeenCalledWith({
-        data: { email: 'test@shopsmart.com', password: 'hashed_pwd' },
+        data: {
+          email: 'test@shopsmart.com',
+          password: 'hashed_pwd',
+          name: '',
+          role: 'CUSTOMER',
+        },
       });
       expect(mockRes.status).toHaveBeenCalledWith(201);
       expect(mockRes.json).toHaveBeenCalledWith({
