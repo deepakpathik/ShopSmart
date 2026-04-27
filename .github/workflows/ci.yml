@@ -21,9 +21,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Root Linting Dependencies
-        run: npm install eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-config-prettier eslint-plugin-prettier prettier --save-dev
-
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
